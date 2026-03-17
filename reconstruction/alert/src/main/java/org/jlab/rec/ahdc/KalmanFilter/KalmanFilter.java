@@ -119,6 +119,8 @@ public class KalmanFilter {
 					hit.setResidual(TrackFitter.residual_LR(hit)); // output: residual
 			    }
 
+				track.setPositionAndMomentumVec((IsVtxDefined) ? yy : y);
+
 				// Fill values for AHDC::kftrack
 				// TO DO : s and p_drift have to be checked to be sure they represent what we want
 				Stepper current_stepper = TrackFitter.getStepper();
