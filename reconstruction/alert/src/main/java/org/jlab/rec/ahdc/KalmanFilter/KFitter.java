@@ -7,6 +7,7 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.jlab.clas.pdg.PhysicsConstants;
 import org.jlab.clas.tracking.kalmanfilter.Material;
+import org.jlab.geom.prim.Line3D;
 import org.jlab.geom.prim.Point3D;
 import org.jlab.rec.ahdc.Hit.Hit;
 
@@ -120,6 +121,28 @@ public class KFitter {
 	public double residual(Hit hit) {
 		double d = hit.distance( new Point3D( stateEstimation.getEntry(0), stateEstimation.getEntry(1), stateEstimation.getEntry(2) ) );
 		return hit.getDoca()-d;
+	}
+
+	public double residual_LR(Hit hit) {
+		// line perpendicautlar to the wire and crossing the state estimation
+		// the origin point of the line is on the wireLine
+		// the end point of the line is the stateEstimation
+		Line3D line = hit.getLine().distance( new Point3D( stateEstimation.getEntry(0), stateEstimation.getEntry(1), stateEstimation.getEntry(2) ) );
+		Point3D origin = line.origin();
+		Point3D end = line.end();
+		double phi_origin = Math.atan2(origin.y(), origin.x()); // between -pi and pi rad
+		double phi_end = Math.atan2(end.y(), end.x()); // between -pi and pi rad
+		if (phi_origin < 0) phi_origin = 2*Math.PI - phi_origin; // between 0 and 2 pi rad
+		if (phi_end < 0) phi_end = 2*Math.PI - phi_end; // between 0 and 2 pi rad
+		// convert to degrees
+		phi_origin = phi_origin*Math.PI/180; // between 0 and 360 deg
+		phi_end = phi_end*Math.PI/180; // between 0 and 360 deg
+		// if sign = -1 : the track is on the left to the wire
+		// if sign = 1 : the track is on the right to the wire
+		// this complex formula is to deal with the case phi_origin and phi_end are not in the same 90 deg sectors
+		// Math.signum(x) is 0 if x = 0; -1 if x < 0; +1 if x > 0 
+		double sign = Math.signum((phi_origin - phi_end)*Math.signum(180-Math.abs(phi_origin - phi_end)));
+		return sign*Math.abs(hit.getDoca()-line.length());
 	}
 
     public void ResetErrorCovariance(final RealMatrix initialErrorCovariance){

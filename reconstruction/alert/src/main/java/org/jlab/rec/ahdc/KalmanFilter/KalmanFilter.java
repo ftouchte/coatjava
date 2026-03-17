@@ -18,6 +18,9 @@ import org.jlab.geom.detector.alert.ATOF.AlertTOFDetector;
 import org.jlab.geom.detector.alert.ATOF.AlertTOFFactory;
 import org.jlab.geom.prim.Point3D;
 
+import org.jlab.io.base.DataBank;
+import org.jlab.io.base.DataEvent;
+
 
 /**
  * This is the main routine of the Kalman Filter. The fit is done by a KFitter
@@ -41,11 +44,102 @@ public class KalmanFilter {
 
 	// mm,  they are the misalignement with respect to the AHDC: the are defined in ALERTEngine
 	private double atof_alignement = 0;
+	private double clas_alignement = +54; // tmp
 
 	private int counter = 0; // number of utilisation of the Kalman Filter
 	
 	AlertTOFDetector ATOFdet = null; // reference to the ATOF geometry
 	HashMap<Integer, ArrayList<int[]>> ATOF_hits_predicted = new HashMap<>(); // trackid vs (sector, layer, wedge)
+
+	public void propagationWithoutCorrection(ArrayList<Track> tracks, final double magfield, boolean IsMC, DataEvent event) { // tmp
+		try {
+			// Initialization ---------------------------------------------------------------------
+			final int         numberOfVariables = 6;
+			final double      tesla             = 0.001;
+			final double[]    B                 = {0.0, 0.0, magfield / 10 * tesla};
+
+			double[] yy = new double[]{0,0,0,0,0,0}; // expected from electron kinematics
+			// Read electron
+			if (event.hasBank("REC::Particle")) {
+				DataBank recBank = event.getBank("REC::Particle");
+				for (int row = 0; row < recBank.rows(); row++) {
+					if (recBank.getInt("pid", row) == 11) {
+						vz_constraint = 10*recBank.getFloat("vz",row) + (IsMC ? 0 : clas_alignement); // conversion in mm
+						IsVtxDefined = true;
+						
+						double px = 1000*recBank.getFloat("px",row); // MeV
+						double py = 1000*recBank.getFloat("py",row); // MeV
+						double pz = 1000*recBank.getFloat("pz",row); // MeV
+						double p = Math.sqrt(px*px+py*py+pz*pz); // MeV
+						double theta = Math.acos(pz/p); // rad
+						double phi = Math.atan2(py, px);
+
+						double beam_energy = 2239.51; // MeV, Special case of run 22712
+						double scattered_energy = p;
+
+						yy[0] = 0;
+						yy[1] = 0;
+						yy[2] = vz_constraint; 
+						yy[3] = -scattered_energy*Math.sin(theta)*Math.cos(phi);
+						yy[4] = -scattered_energy*Math.sin(theta)*Math.sin(phi);
+						yy[5] = beam_energy - scattered_energy*Math.cos(theta);
+
+						break; // only look at the first electron
+					}
+				}
+			}
+
+            // Loop over tracks
+			for (Track track : tracks) {
+			    /// Initialize state vector
+			    double x0  = 0.0;
+			    double y0  = 0.0;
+			    double z0  = track.get_Z0();
+			    double px0 = track.get_px();
+			    double py0 = track.get_py();
+			    double pz0 = track.get_pz();
+
+			    double[]     y   = new double[]{x0, y0, z0, px0, py0, pz0};
+
+			    /// Read list of hits
+			    ArrayList<Hit> AHDC_hits = track.getHits();
+			
+			    /// Initialize propagator
+			    RungeKutta4 RK4        = new RungeKutta4(particle, numberOfVariables, B);
+			    Propagator  propagator = new Propagator(RK4);
+
+			    /// Initialization of the Kalman Fitter
+			    RealVector initialStateEstimate   = (IsVtxDefined) ? new ArrayRealVector(yy) : new ArrayRealVector(y);
+				RealMatrix initialErrorCovariance = track.getErrorCovarianceMatrix();
+				KFitter TrackFitter = new KFitter(initialStateEstimate, initialErrorCovariance, propagator, materialHashMap);
+
+				// Forward propagation in AHDC
+			    for (Hit hit : AHDC_hits) {
+                    TrackFitter.predict(hit, true);
+					hit.setResidual(TrackFitter.residual_LR(hit)); // output: residual
+			    }
+
+				// Fill values for AHDC::kftrack
+				// TO DO : s and p_drift have to be checked to be sure they represent what we want
+				Stepper current_stepper = TrackFitter.getStepper();
+			    double s = current_stepper.sTot;
+			    double p_drift = current_stepper.p();
+			    double sum_residuals = 0;
+			    double chi2 = 0;
+			    for (Hit hit : AHDC_hits) {
+                    sum_residuals += hit.getResidual();
+                    chi2 += Math.pow(hit.getResidual(),2)/hit.MeasurementNoiseMatrix().getEntry(0,0);
+			    }
+			    track.set_sum_residuals(sum_residuals);
+			    track.set_chi2(chi2/(AHDC_hits.size()-3));
+			    track.set_p_drift(p_drift);
+			    track.set_path(s);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			//System.out.println("Error in Kalman Filter");
+		}
+	}
 
 	public void propagation(ArrayList<Track> tracks, final double magfield, boolean IsMC) {
 
