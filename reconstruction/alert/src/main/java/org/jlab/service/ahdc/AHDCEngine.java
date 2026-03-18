@@ -253,7 +253,7 @@ public class AHDCEngine extends ReconstructionEngine {
             DataBank recoInterClusterBank = writer.fillInterClusterBank(event, all_interclusters);
             // DataBank AIPredictionBanks = writer.fillAIPrediction(event, predictions);
 
-            //event.removeBanks("AHDC::hits","AHDC::preclusters","AHDC::clusters","AHDC::track","AHDC::kftrack","AHDC::mc","AHDC::ai:prediction");
+            event.removeBanks("AHDC::hits","AHDC::preclusters","AHDC::clusters","AHDC::track","AHDC::kftrack","AHDC::mc","AHDC::ai:prediction");
             event.appendBank(recoHitsBank);
             event.appendBank(recoPreClusterBank);
             event.appendBank(recoClusterBank);

@@ -116,7 +116,8 @@ public class KalmanFilter {
 				// Forward propagation in AHDC
 			    for (Hit hit : AHDC_hits) {
                     TrackFitter.predict(hit, true);
-					hit.setResidual(TrackFitter.residual_LR(hit)); // output: residual
+					hit.setResidual(TrackFitter.residual(hit)); // output: residual
+					hit.setResidual_LR(TrackFitter.residual_LR(hit)); // output: residual LR
 			    }
 
 				track.setPositionAndMomentumVec((IsVtxDefined) ? yy : y);
