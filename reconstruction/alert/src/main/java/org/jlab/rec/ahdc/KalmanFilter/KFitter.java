@@ -150,7 +150,7 @@ public class KFitter {
 		double phiB = Math.atan2(B.y(), B.x());
 		//double phiA = Math.atan2(A.y(), A.x());
 
-		return Math.signum(phiC - phiB)*(hit.getDoca()-line.length());
+		return Math.signum(phiC - phiB)*Math.abs(hit.getDoca()-line.length());
 	}
 
 	public double residual_phi_LR(Hit hit) {
