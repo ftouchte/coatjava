@@ -226,8 +226,7 @@ public class AlertDCFactory implements Factory<AlertDCDetector, AlertDCSector, A
 			// a new class should be created: public class NewClassWire extends PrismaticComponent {...}
 			// 5 top points & 5 bottom points with convexe shape. Concave shape is not supported.
 			AlertDCWire wire = new AlertDCWire(wireId+1, wireLine, firstF, secondF);
-			if (superlayerId+1 % 2 == 0) 
-				wire.rotateZ(Math.toRadians(1));
+			if ((superlayerId+1) % 2 == 0) wire.rotateZ(Math.toRadians(1));
 			// Add wire object to the list
 			layer.addComponent(wire);
 		}
