@@ -28,7 +28,7 @@ public class RecoBankWriter {
 			bank.setInt("wire", i, hitList.get(i).getWireId());
 			bank.setDouble("doca", i, hitList.get(i).getDoca());
 			bank.setDouble("residual", i, hitList.get(i).getResidual());
-			bank.setDouble("time", i, hitList.get(i).getTime());
+			bank.setDouble("time", i, hitList.get(i).getResidual_phi_LR());
 			bank.setInt("adc", i, (int) hitList.get(i).getADC());
 			bank.setDouble("timeOverThreshold", i, hitList.get(i).getResidual_LR());
 			bank.setInt("trackid", i, hitList.get(i).getTrackId());

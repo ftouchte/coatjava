@@ -128,19 +128,42 @@ public class KFitter {
 		// the origin point of the line is on the wireLine
 		// the end point of the line is the stateEstimation
 		Line3D line = hit.getLine().distance( new Point3D( stateEstimation.getEntry(0), stateEstimation.getEntry(1), stateEstimation.getEntry(2) ) );
-		Point3D origin = line.origin();
-		Point3D end = line.end();
-		double phi_origin = Math.atan2(origin.y(), origin.x()); // between -pi and pi rad
-		double phi_end = Math.atan2(end.y(), end.x()); // between -pi and pi rad
-		if (Math.signum(phi_origin*phi_end) < 0 && Math.abs(phi_origin) > 2.5) {
-			if (phi_origin < 0) phi_origin = 2*Math.PI + phi_origin; // between 0 and 2 pi rad
-			if (phi_end < 0) phi_end = 2*Math.PI + phi_end; // between 0 and 2 pi rad
-		}
-		// if sign = -1 : the track is on the left to the wire
-		// if sign = 1 : the track is on the right to the wire
-		// Math.signum(x) is 0 if x = 0; -1 if x < 0; +1 if x > 0 
-		double sign = Math.signum(phi_origin - phi_end);
-		return sign*(hit.getDoca()-line.length());
+		// Point3D origin = line.origin();
+		// Point3D end = line.end();
+		// double phi_origin = Math.atan2(origin.y(), origin.x()); // between -pi and pi rad
+		// double phi_end = Math.atan2(end.y(), end.x()); // between -pi and pi rad
+		// if (Math.signum(phi_origin*phi_end) < 0 && Math.abs(phi_origin) > 2.5) {
+		// 	if (phi_origin < 0) phi_origin = 2*Math.PI + phi_origin; // between 0 and 2 pi rad
+		// 	if (phi_end < 0) phi_end = 2*Math.PI + phi_end; // between 0 and 2 pi rad
+		// }
+		// // if sign = -1 : the track is on the left to the wire
+		// // if sign = 1 : the track is on the right to the wire
+		// // Math.signum(x) is 0 if x = 0; -1 if x < 0; +1 if x > 0 
+		// double sign = Math.signum(phi_origin - phi_end);
+		// return sign*(hit.getDoca()-line.length());
+
+		Point3D A = line.origin(); // point on the wire line
+		Point3D B = line.end(); // point on the track
+		Point3D C = line.lerpPoint(hit.getDoca()/line.length()); // measurement point on [AB)
+
+		double phiC = Math.atan2(C.y(), C.x()); // between -pi and pi rad
+		double phiB = Math.atan2(B.y(), B.x());
+		//double phiA = Math.atan2(A.y(), A.x());
+
+		return Math.signum(phiC - phiB)*(hit.getDoca()-line.length());
+	}
+
+	public double residual_phi_LR(Hit hit) {
+		Line3D line = hit.getLine().distance( new Point3D( stateEstimation.getEntry(0), stateEstimation.getEntry(1), stateEstimation.getEntry(2) ) );
+		Point3D A = line.origin(); // point on the wire line
+		Point3D B = line.end(); // point on the track
+		Point3D C = line.lerpPoint(hit.getDoca()/line.length()); // measurement point on [AB)
+
+		double phiC = Math.atan2(C.y(), C.x()); // between -pi and pi rad
+		double phiB = Math.atan2(B.y(), B.x());
+		//double phiA = Math.atan2(A.y(), A.x());
+
+		return phiC - phiB;
 	}
 
     public void ResetErrorCovariance(final RealMatrix initialErrorCovariance){

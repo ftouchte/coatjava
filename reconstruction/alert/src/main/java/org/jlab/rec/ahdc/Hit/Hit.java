@@ -33,6 +33,7 @@ public class Hit implements Comparable<Hit>, KFHit {
 	private double  y;
 	private double  residual;
 	private double  residual_LR;
+	private double  residual_phi_LR;
 	private int	trackId;
 
     //updated constructor with ADC
@@ -167,6 +168,14 @@ public class Hit implements Comparable<Hit>, KFHit {
 
 	public double getResidual_LR() {
 		return residual_LR;
+	}
+
+	public void setResidual_phi_LR(double resid) {
+		this.residual_phi_LR = resid;
+	}
+
+	public double getResidual_phi_LR() {
+		return residual_phi_LR;
 	}
 
 	/** Set calibrated ToT */

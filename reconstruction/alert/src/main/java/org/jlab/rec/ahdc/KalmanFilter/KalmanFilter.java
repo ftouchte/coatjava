@@ -118,6 +118,7 @@ public class KalmanFilter {
                     TrackFitter.predict(hit, true);
 					hit.setResidual(TrackFitter.residual(hit)); // output: residual
 					hit.setResidual_LR(TrackFitter.residual_LR(hit)); // output: residual LR
+					hit.setResidual_phi_LR(TrackFitter.residual_phi_LR(hit)); // output: residual phi LR
 			    }
 
 				track.setPositionAndMomentumVec((IsVtxDefined) ? yy : y);
