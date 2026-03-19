@@ -140,7 +140,7 @@ public class KFitter {
 		// if sign = 1 : the track is on the right to the wire
 		// Math.signum(x) is 0 if x = 0; -1 if x < 0; +1 if x > 0 
 		double sign = Math.signum(phi_origin - phi_end);
-		return sign*Math.abs(hit.getDoca()-line.length());
+		return sign*(hit.getDoca()-line.length());
 	}
 
     public void ResetErrorCovariance(final RealMatrix initialErrorCovariance){
