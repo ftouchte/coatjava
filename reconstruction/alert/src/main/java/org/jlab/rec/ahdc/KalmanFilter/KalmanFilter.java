@@ -240,8 +240,8 @@ public class KalmanFilter {
 			    for (Hit hit : AHDC_hits) {
                     PostFitPropagator.predict(hit, true);
 					hit.setResidual(PostFitPropagator.residual(hit)); // output: residual
-					hit.setResidual_LR(TrackFitter.residual_LR(hit)); // output: residual LR
-					hit.setResidual_phi_LR(TrackFitter.residual_phi_LR(hit)); // output: residual phi LR
+					hit.setResidual_LR(PostFitPropagator.residual_LR(hit)); // output: residual LR
+					hit.setResidual_phi_LR(PostFitPropagator.residual_phi_LR(hit)); // output: residual phi LR
 			    }
 
 				// Fill values for AHDC::kftrack
