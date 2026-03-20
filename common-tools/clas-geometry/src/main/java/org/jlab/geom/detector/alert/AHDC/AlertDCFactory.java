@@ -231,10 +231,10 @@ public class AlertDCFactory implements Factory<AlertDCDetector, AlertDCSector, A
 				wire.rotateZ(Math.toRadians(0));
 			} 
 			else if (superlayerId+1 == 2 && layerId+1 == 1) {
-				wire.rotateZ(Math.toRadians(0.91));
+				wire.rotateZ(Math.toRadians(2.55));
 			}
 			else if (superlayerId+1 == 2 && layerId+1 == 2) {
-				wire.rotateZ(Math.toRadians(0.69));
+				wire.rotateZ(Math.toRadians(2.11));
 			}
 			else if (superlayerId+1 == 3 && layerId+1 == 1) {
 				wire.rotateZ(Math.toRadians(0));
@@ -243,10 +243,10 @@ public class AlertDCFactory implements Factory<AlertDCDetector, AlertDCSector, A
 				wire.rotateZ(Math.toRadians(-0.32));
 			}
 			else if (superlayerId+1 == 4 && layerId+1 == 1) {
-				wire.rotateZ(Math.toRadians(0.95));
+				wire.rotateZ(Math.toRadians(3));
 			}
 			else if (superlayerId+1 == 4 && layerId+1 == 2) {
-				wire.rotateZ(Math.toRadians(0.80));
+				wire.rotateZ(Math.toRadians(2.13));
 			}
 			else if (superlayerId+1 == 5 && layerId+1 == 1) {
 				wire.rotateZ(Math.toRadians(-0.21));
