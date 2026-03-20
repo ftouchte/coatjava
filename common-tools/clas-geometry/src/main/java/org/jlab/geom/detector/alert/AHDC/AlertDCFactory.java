@@ -243,7 +243,7 @@ public class AlertDCFactory implements Factory<AlertDCDetector, AlertDCSector, A
 				wire.rotateZ(Math.toRadians(-0.32));
 			}
 			else if (superlayerId+1 == 4 && layerId+1 == 1) {
-				wire.rotateZ(Math.toRadians(3));
+				wire.rotateZ(Math.toRadians(2.37));
 			}
 			else if (superlayerId+1 == 4 && layerId+1 == 2) {
 				wire.rotateZ(Math.toRadians(2.13));
