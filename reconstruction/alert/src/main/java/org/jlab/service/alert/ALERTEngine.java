@@ -65,7 +65,7 @@ public class ALERTEngine extends ReconstructionEngine {
     private RecoBankWriter rbc;
     static final Logger LOGGER = Logger.getLogger(ModelPrePID.class.getName());
     AlertTOFDetector ATOF; // ALERT ATOF detector
-    private AlertDCDetector AHDC; // ALERT AHDC detector
+    //private AlertDCDetector AHDC; // ALERT AHDC detector
 
     /**
      *  Current run number being processed.
@@ -108,7 +108,7 @@ public class ALERTEngine extends ReconstructionEngine {
         AlertTOFFactory factory = new AlertTOFFactory();
         DatabaseConstantProvider cp = new DatabaseConstantProvider(11, "default");
         ATOF = factory.createDetectorCLAS(cp);
-        AHDC = (new AlertDCFactory()).createDetectorCLAS(new DatabaseConstantProvider());
+        //AHDC = (new AlertDCFactory()).createDetectorCLAS(new DatabaseConstantProvider());
 
         if(this.getEngineConfigString("Mode")!=null) {
             //if (Objects.equals(this.getEngineConfigString("Mode"), Mode.AI_Track_Finding.name()))
@@ -142,6 +142,10 @@ public class ALERTEngine extends ReconstructionEngine {
      */
     @Override
     public boolean processDataEvent(DataEvent event) {
+        return false;
+    }
+
+    public boolean processDataEvent(DataEvent event, AlertDCDetector AHDCdet) {
 
         if (!event.hasBank("AHDC::adc")) 
             return false;
@@ -402,7 +406,7 @@ public class ALERTEngine extends ReconstructionEngine {
                     if (adc_gain != null) raw_adc = adc/adc_gain[0];
                     //System.out.println("adc : " + adc + " raw_adc : " + raw_adc);
                     Hit hit = new Hit(id, superlayer, layer, wire, doca, raw_adc, time);
-                    hit.setWirePosition(AHDC);
+                    hit.setWirePosition(AHDCdet);
                     hit.setTrackId(trackid);
                     hit.setADC(adc);
                     hit.setToT(tot);
@@ -576,6 +580,7 @@ public class ALERTEngine extends ReconstructionEngine {
         KF.propagation(AHDC_tracks, magfield, IsMC);
 
         /// write the AHDC::kftrack bank in the event
+        event.removeBank("AHDC::kftrack");
         org.jlab.rec.ahdc.Banks.RecoBankWriter ahdc_writer = new org.jlab.rec.ahdc.Banks.RecoBankWriter();
         DataBank recoKFTracksBank   = ahdc_writer.fillAHDCKFTrackBank(event, AHDC_tracks);
         event.appendBank(recoKFTracksBank);
@@ -593,7 +598,7 @@ public class ALERTEngine extends ReconstructionEngine {
     }
 
 
-    public boolean processDataEventProjOnly(DataEvent event) {
+    public boolean processDataEventProjOnly(DataEvent event, AlertDCDetector AHDCdet) {
 
         if (!event.hasBank("AHDC::adc")) 
             return false;
@@ -818,7 +823,7 @@ public class ALERTEngine extends ReconstructionEngine {
                     if (adc_gain != null) raw_adc = adc/adc_gain[0];
                     //System.out.println("adc : " + adc + " raw_adc : " + raw_adc);
                     Hit hit = new Hit(id, superlayer, layer, wire, doca, raw_adc, time);
-                    hit.setWirePosition(AHDC); // key point
+                    hit.setWirePosition(AHDCdet); // key point
                     hit.setTrackId(trackid);
                     hit.setADC(adc);
                     hit.setToT(tot);
@@ -861,6 +866,7 @@ public class ALERTEngine extends ReconstructionEngine {
         
 
         /// write the AHDC::kftrack bank in the event
+        event.removeBank("AHDC::kftrack");
         org.jlab.rec.ahdc.Banks.RecoBankWriter ahdc_writer = new org.jlab.rec.ahdc.Banks.RecoBankWriter();
         DataBank recoKFTracksBank   = ahdc_writer.fillAHDCKFTrackBank(event, AHDC_tracks);
         event.appendBank(recoKFTracksBank);
