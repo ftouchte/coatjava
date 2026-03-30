@@ -44,6 +44,7 @@ public class KalmanFilter {
 
 	// mm,  they are the misalignement with respect to the AHDC: the are defined in ALERTEngine
 	private double atof_alignement = 0;
+	double clas_alignement = +70; // tmp
 	
 
 	private int counter = 0; // number of utilisation of the Kalman Filter
@@ -58,7 +59,7 @@ public class KalmanFilter {
 			final double      tesla             = 0.001;
 			final double[]    B                 = {0.0, 0.0, magfield / 10 * tesla};
 
-			double clas_alignement = +30; // tmp
+			
 
 			double[] yy = new double[]{0,0,0,0,0,0}; // expected from electron kinematics
 			// Read electron
@@ -507,6 +508,7 @@ public class KalmanFilter {
 
 	public void set_ATOF_detector(AlertTOFDetector atof) { this.ATOFdet = atof;}
 	public void set_atof_alignement(double _shift) {this.atof_alignement = _shift;}
+	public void set_clas_alignement(double _shift) {this.clas_alignement = _shift;}
 	public void set_vz_constraint(double _vz) {this.vz_constraint = _vz;}
 	public void set_vertex_flag(boolean _flag) {this.IsVtxDefined = _flag;}
 }

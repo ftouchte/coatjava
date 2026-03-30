@@ -351,8 +351,9 @@ public class ALERTEngine extends ReconstructionEngine {
 
         /// tmp: misalignement with respect to the center of the AHDC (mm)
         /// the AHDC is at the center of the solenoid
-        double clas_alignement = +30;
-        double atof_alignement = -32.7;
+        // double clas_alignement = +30;
+        // double atof_alignement = -32.7;
+        
 
         /// Read the electron vertex
         double vz_electron = 0;
@@ -597,6 +598,11 @@ public class ALERTEngine extends ReconstructionEngine {
         return true;
     }
 
+    double clas_alignement = +70;
+    double atof_alignement = 0;
+
+    public void set_atof_alignement(double _shift) {this.atof_alignement = _shift;}
+	public void set_clas_alignement(double _shift) {this.clas_alignement = _shift;}
 
     public boolean processDataEventProjOnly(DataEvent event, AlertDCDetector AHDCdet) {
 
@@ -703,6 +709,8 @@ public class ALERTEngine extends ReconstructionEngine {
         KalmanFilter KF = new KalmanFilter(proton, Niter);
         
         // ------tmp propagation without a fit
+        KF.set_clas_alignement(this.clas_alignement); //mm
+        KF.set_atof_alignement(this.atof_alignement); // mm
         KF.propagationWithoutCorrection(AHDC_tracks, magfield, IsMC, event);
         // ----------
         
