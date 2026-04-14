@@ -6,6 +6,7 @@ import org.jlab.geom.base.Factory;
 import org.jlab.geom.prim.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -25,6 +26,19 @@ public class AlertDCFactory implements Factory<AlertDCDetector, AlertDCSector, A
 
 	private final int nsuperl = 5; // 5 for AHDC
 	private final int nlayers = 2; // 1 if superlayerId = 0 OR 4, 2 if superlayerId = 1 OR 2 OR 3 for AHDC
+
+	private double[] wire_correction_angles_start = new double[576];
+	private double[] wire_correction_angles_end = new double[576];
+
+	public void setWireCorrectionAngles(double[] _correction_angles_start, double[] _correction_angles_end) {
+		wire_correction_angles_start = Arrays.copyOf(_correction_angles_start, _correction_angles_start.length);
+		wire_correction_angles_end   = Arrays.copyOf(_correction_angles_end, _correction_angles_end.length);
+	}
+
+	public AlertDCFactory() {
+		Arrays.fill(wire_correction_angles_start, 0.0);
+		Arrays.fill(wire_correction_angles_end, 0.0);
+	}
 
 	@Override
 	public AlertDCDetector createDetectorCLAS(ConstantProvider cp) {
@@ -205,6 +219,25 @@ public class AlertDCFactory implements Factory<AlertDCDetector, AlertDCSector, A
 			Point3D p_9  = new Point3D(px_9, py_9, z_end);
 			Point3D p_10 = new Point3D(px_10, py_10, z_end);
 			Point3D p_11 = new Point3D(px_11, py_11, z_end);
+
+			// 	alignment correction
+			AlertDCWireIdentifier identifier = new AlertDCWireIdentifier(sectorId+1, (superlayerId+1)*10 + (layerId+1), wireId+1);
+			int number = identifier.getNumber();
+			p_0.rotateZ(wire_correction_angles_start[number]);
+			p_1.rotateZ(wire_correction_angles_start[number]);
+			p_2.rotateZ(wire_correction_angles_start[number]);
+			p_3.rotateZ(wire_correction_angles_start[number]);
+			p_4.rotateZ(wire_correction_angles_start[number]);
+			p_5.rotateZ(wire_correction_angles_start[number]);
+
+			p_6.rotateZ(wire_correction_angles_end[number]);
+			p_7.rotateZ(wire_correction_angles_end[number]);
+			p_8.rotateZ(wire_correction_angles_end[number]);
+			p_9.rotateZ(wire_correction_angles_end[number]);
+			p_10.rotateZ(wire_correction_angles_end[number]);
+			p_11.rotateZ(wire_correction_angles_end[number]);
+			
+
 			// defining a cell around a wireLine, must be counter-clockwise!
 			firstF.add(p_0);
 			firstF.add(p_5);
