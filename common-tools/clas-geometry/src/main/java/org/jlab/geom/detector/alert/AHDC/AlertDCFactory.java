@@ -27,8 +27,8 @@ public class AlertDCFactory implements Factory<AlertDCDetector, AlertDCSector, A
 	private final int nsuperl = 5; // 5 for AHDC
 	private final int nlayers = 2; // 1 if superlayerId = 0 OR 4, 2 if superlayerId = 1 OR 2 OR 3 for AHDC
 
-	private double[] wire_correction_angles_start = new double[576];
-	private double[] wire_correction_angles_end = new double[576];
+	private double[] wire_correction_angles_start = new double[576]; // in deg
+	private double[] wire_correction_angles_end = new double[576]; // in deg
 
 	public void setWireCorrectionAngles(double[] _correction_angles_start, double[] _correction_angles_end) {
 		wire_correction_angles_start = Arrays.copyOf(_correction_angles_start, _correction_angles_start.length);
@@ -223,19 +223,22 @@ public class AlertDCFactory implements Factory<AlertDCDetector, AlertDCSector, A
 			// 	alignment correction
 			AlertDCWireIdentifier identifier = new AlertDCWireIdentifier(sectorId+1, (superlayerId+1)*10 + (layerId+1), wireId+1);
 			int number = identifier.getNumber();
-			p_0.rotateZ(wire_correction_angles_start[number]);
-			p_1.rotateZ(wire_correction_angles_start[number]);
-			p_2.rotateZ(wire_correction_angles_start[number]);
-			p_3.rotateZ(wire_correction_angles_start[number]);
-			p_4.rotateZ(wire_correction_angles_start[number]);
-			p_5.rotateZ(wire_correction_angles_start[number]);
+			double corrected_start_angle = Math.toRadians(wire_correction_angles_start[number]);
+			double corrected_end_angle = Math.toRadians(wire_correction_angles_end[number]);
+			p_0.rotateZ(corrected_start_angle);
+			p_1.rotateZ(corrected_start_angle);
+			p_2.rotateZ(corrected_start_angle);
+			p_3.rotateZ(corrected_start_angle);
+			p_4.rotateZ(corrected_start_angle);
+			p_5.rotateZ(corrected_start_angle);
 
-			p_6.rotateZ(wire_correction_angles_end[number]);
-			p_7.rotateZ(wire_correction_angles_end[number]);
-			p_8.rotateZ(wire_correction_angles_end[number]);
-			p_9.rotateZ(wire_correction_angles_end[number]);
-			p_10.rotateZ(wire_correction_angles_end[number]);
-			p_11.rotateZ(wire_correction_angles_end[number]);
+			p_6.rotateZ(corrected_end_angle);
+			p_7.rotateZ(corrected_end_angle);
+			p_8.rotateZ(corrected_end_angle);
+			p_9.rotateZ(corrected_end_angle);
+			p_10.rotateZ(corrected_end_angle);
+			p_11.rotateZ(corrected_end_angle);
+			
 			
 
 			// defining a cell around a wireLine, must be counter-clockwise!
