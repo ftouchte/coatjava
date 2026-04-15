@@ -238,10 +238,15 @@ public class AlertDCFactory implements Factory<AlertDCDetector, AlertDCSector, A
 			p_9.rotateZ(corrected_end_angle);
 			p_10.rotateZ(corrected_end_angle);
 			p_11.rotateZ(corrected_end_angle);
+
+			lPoint.rotateZ(corrected_start_angle);
+			rPoint.rotateZ(corrected_end_angle);
+			wireLine = new Line3D(lPoint, rPoint);
 			
 			
 
 			// defining a cell around a wireLine, must be counter-clockwise!
+
 			firstF.add(p_0);
 			firstF.add(p_5);
 			firstF.add(p_4);
