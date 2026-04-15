@@ -44,7 +44,7 @@ public class KalmanFilter {
 
 	// mm,  they are the misalignement with respect to the AHDC: the are defined in ALERTEngine
 	private double atof_alignement = 0;
-	double clas_alignement = +70; // tmp
+	double clas_alignement = +75; // tmp
 	
 
 	private int counter = 0; // number of utilisation of the Kalman Filter
