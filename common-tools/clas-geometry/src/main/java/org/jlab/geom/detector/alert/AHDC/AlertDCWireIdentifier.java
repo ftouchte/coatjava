@@ -55,7 +55,6 @@ public class AlertDCWireIdentifier {
      * @return a triplet (sector, layer, component) in int[]
      */
     public static int[] wire2slc(int wire) {
-        int sector = -1;
         int layer = -1;
         int component = -1;
         if (wire < 47) {
@@ -90,7 +89,7 @@ public class AlertDCWireIdentifier {
             layer = 51;
             component = wire - 47 - 56 - 56 - 72 - 72 - 87 - 87 + 1;
         }
-        return new int[] {sector, layer, component};
+        return new int[] {1, layer, component};
     }
 
     /**
