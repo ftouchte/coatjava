@@ -47,6 +47,19 @@ public class HitReader {
             int sector     = bankDGTZ.getInt("sector", i);
             int wire       = bankDGTZ.getShort("component", i);
 
+            if (number == 21 && wire == 18) {
+                wire = 19;
+            }
+            else if (number == 21 && wire == 19) {
+                wire = 18;
+            }
+            else if (number == 22 && wire == 20) {
+                wire = 22;
+            }
+            else if (number == 22 && wire == 22) {
+                wire = 20;
+            }
+
             // RAW quantities from bank
             double adcRaw            = bankDGTZ.getInt("ADC", i);
             double leadingEdgeTime   = bankDGTZ.getFloat("leadingEdgeTime", i);
