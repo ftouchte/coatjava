@@ -59,6 +59,38 @@ public class HitReader {
             else if (number == 22 && wire == 22) {
                 wire = 20;
             }
+            // else if (number == 21 && wire == 29) {
+            //     wire = 31;
+            // }
+            // else if (number == 21 && wire == 31) {
+            //     wire = 29;
+            // }
+            // else if (number == 21 && wire == 42) {
+            //     wire = 44;
+            // }
+            // else if (number == 21 && wire == 44) {
+            //     wire = 42;
+            // }
+            // else if (number == 22 && wire == 29) {
+            //     wire = 31;
+            // }
+            // else if (number == 22 && wire == 31) {
+            //     wire = 29;
+            // }
+            // else if (number == 22 && wire == 42) {
+            //     wire = 43;
+            // }
+            // else if (number == 22 && wire == 43) {
+            //     wire = 42;
+            // }
+            // else if (number == 31 && wire == 38) {
+            //     wire = 40;
+            // }
+            // else if (number == 31 && wire == 40) {
+            //     wire = 38;
+            // }
+
+
 
             // RAW quantities from bank
             double adcRaw            = bankDGTZ.getInt("ADC", i);

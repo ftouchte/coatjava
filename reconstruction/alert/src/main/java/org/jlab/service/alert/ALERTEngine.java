@@ -28,6 +28,7 @@ import org.jlab.rec.ahdc.KalmanFilter.KalmanFilter;
 import org.jlab.rec.ahdc.Hit.Hit;
 import org.jlab.geom.detector.alert.AHDC.AlertDCDetector;
 import org.jlab.geom.detector.alert.AHDC.AlertDCFactory;
+import org.jlab.geom.detector.alert.AHDC.AlertDCWireIdentifier;
 import org.jlab.rec.ahdc.Track.Track;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
@@ -65,7 +66,7 @@ public class ALERTEngine extends ReconstructionEngine {
     private RecoBankWriter rbc;
     static final Logger LOGGER = Logger.getLogger(ModelPrePID.class.getName());
     AlertTOFDetector ATOF; // ALERT ATOF detector
-    //private AlertDCDetector AHDC; // ALERT AHDC detector
+    private AlertDCDetector AHDC; // ALERT AHDC detector
 
     /**
      *  Current run number being processed.
@@ -108,6 +109,15 @@ public class ALERTEngine extends ReconstructionEngine {
         AlertTOFFactory factory = new AlertTOFFactory();
         DatabaseConstantProvider cp = new DatabaseConstantProvider(11, "default");
         ATOF = factory.createDetectorCLAS(cp);
+
+        /// --- apply current layer alignment
+        double[] layer_angles_start = {0.8609, 1.0181, 0.5654, 0.7998, 0.3913, 0.5151, 0.2749, 0.5057};
+        double[] layer_angles_end   = {0.8412, 0.8157, 0.4084, 0.7939, 0.4747, 0.5086, 0.3518, 0.2534};
+        double[] wire_angles_start = layerAngles2WireAngles(layer_angles_start);
+        double[] wire_angles_end   = layerAngles2WireAngles(layer_angles_end);
+        AHDC = generateAhdcGeometry(wire_angles_start, wire_angles_end);
+        /// --- end alignment
+
         //AHDC = (new AlertDCFactory()).createDetectorCLAS(new DatabaseConstantProvider());
 
         if(this.getEngineConfigString("Mode")!=null) {
@@ -142,7 +152,7 @@ public class ALERTEngine extends ReconstructionEngine {
      */
     @Override
     public boolean processDataEvent(DataEvent event) {
-        return false;
+        return processDataEvent(event, AHDC);
     }
 
     public boolean processDataEvent(DataEvent event, AlertDCDetector AHDCdet) {
@@ -328,7 +338,7 @@ public class ALERTEngine extends ReconstructionEngine {
         return true;
     }
 
-    double clas_alignement = +70;
+    double clas_alignement = +75;
     double atof_alignement = 0;
 
     public void set_atof_alignement(double _shift) {this.atof_alignement = _shift;}
@@ -519,5 +529,36 @@ public class ALERTEngine extends ReconstructionEngine {
         float magField[] = new float[3];
         swim.BfieldLab(eventVx, eventVy, eventVz, magField); 
         this.b = Math.sqrt(Math.pow(magField[0],2) + Math.pow(magField[1],2) + Math.pow(magField[2],2));
+    }
+
+
+    /**
+     * Code copied from amon/java-utils/.../AhdcAlignmentAnalyser
+     * 
+     * Convert a layer by layer results to a wire by wire results. Idea: all the wires belonging to the same layer have the same modification.
+     * @param layer_angles
+     * @return a vector of 576 double containing the wire values
+     */
+    static public double[] layerAngles2WireAngles(double[] layer_angles) {
+        double[] wire_angles = new double[576];
+        for (int i = 0; i < 576; i++) {
+            AlertDCWireIdentifier identifier = new AlertDCWireIdentifier(i);
+            int num = AlertDCWireIdentifier.layer2number(identifier.getLayerId())-1;
+            wire_angles[i] = layer_angles[num];
+        }
+        return wire_angles;
+    }
+
+    /**
+     * Code copied from amon/java-utils/.../AhdcAlignmentAnalyser
+     * Generate the AHDC geometry with specific correction angles
+     * @param _wire_angles_start rotation to be applied to the start of the AHDC wires
+     * @param _wire_angles_end rotation to be applied to the end of the AHDC wires
+     * @return AHDC geometry
+     */
+    static AlertDCDetector generateAhdcGeometry(double[] _wire_angles_start, double[] _wire_angles_end) {
+        AlertDCFactory factory = new AlertDCFactory();
+        factory.setWireCorrectionAngles(_wire_angles_start, _wire_angles_end);
+        return factory.createDetectorCLAS(new DatabaseConstantProvider());
     }
 }
