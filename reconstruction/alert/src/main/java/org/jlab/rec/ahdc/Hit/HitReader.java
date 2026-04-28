@@ -57,55 +57,46 @@ public class HitReader {
             else if (number == 22 && wire == 22) {
                 wire = 20;
             } // OK
+            else if (number == 31 && wire == 68) {
+                number = 32;
+                wire = 68;
+            } // OK
+            else if (number == 32 && wire == 68) {
+                number = 31;
+                wire = 68;
+            } // OK
 
-            else if (number == 21 && wire == 31) {
+            // gr1
+            else if (number == 21 && wire == 29) {
                 number = 22;
                 wire = 29;
             }
             else if (number == 22 && wire == 29) {
                 number = 21;
-                wire = 31;
-            } // tested
-
-            else if (number == 22 && wire == 30) {
-                number = 21;
                 wire = 29;
-            }
-            else if (number == 21 && wire == 29) {
-                number = 22;
-                wire = 30;
             } // tested
 
-            else if (number == 11 && wire == 35) {
-                number = 21;
-                wire = 44;
-            }
-            else if (number == 21 && wire == 44) {
-                number = 11;
-                wire = 35;
-            } // tested
-
+            // gr2
             else if (number == 22 && wire == 43) {
                 number = 22;
                 wire = 42;
             }
             else if (number == 22 && wire == 42) {
-                number = 31;
-                wire = 56;
-            }
-            else if (number == 31 && wire == 56) {
                 number = 22;
                 wire = 43;
             } // tested
 
-            else if (number == 31 && wire == 68) {
-                number = 32;
-                wire = 68;
+            // gr3
+            else if (number == 21 && wire == 54) {
+                number = 21;
+                wire = 56;
             }
-            else if (number == 32 && wire == 68) {
-                number = 31;
-                wire = 68;
+            else if (number == 21 && wire == 56) {
+                number = 21;
+                wire = 54;
             } // tested
+
+            
 
 
             // -----
