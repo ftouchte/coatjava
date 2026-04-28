@@ -76,24 +76,38 @@ public class HitReader {
                 wire = 29;
             } // tested
 
+            // gr1 bis
+            else if (number == 21 && wire == 31) {
+                number = 22;
+                wire = 31;
+            }
+            else if (number == 22 && wire == 31) {
+                number = 21;
+                wire = 31;
+            } // tested
+
             // gr2
             else if (number == 22 && wire == 43) {
                 number = 22;
                 wire = 42;
             }
             else if (number == 22 && wire == 42) {
+                number = 31;
+                wire = 56;
+            }
+            else if (number == 31 && wire == 56) {
                 number = 22;
                 wire = 43;
             } // tested
 
             // gr3
-            else if (number == 21 && wire == 54) {
-                number = 21;
-                wire = 56;
+            else if (number == 21 && wire == 1) {
+                number = 31;
+                wire = 7;
             }
-            else if (number == 21 && wire == 56) {
+            else if (number == 31 && wire == 7) {
                 number = 21;
-                wire = 54;
+                wire = 1;
             } // tested
 
             
