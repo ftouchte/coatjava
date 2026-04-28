@@ -79,9 +79,9 @@ public class HitReader {
             // gr1 bis
             else if (number == 21 && wire == 31) {
                 number = 22;
-                wire = 31;
+                wire = 30;
             }
-            else if (number == 22 && wire == 31) {
+            else if (number == 22 && wire == 30) {
                 number = 21;
                 wire = 31;
             } // tested
@@ -92,23 +92,29 @@ public class HitReader {
                 wire = 42;
             }
             else if (number == 22 && wire == 42) {
-                number = 31;
-                wire = 56;
-            }
-            else if (number == 31 && wire == 56) {
                 number = 22;
                 wire = 43;
-            } // tested
+            }
+            // gr2 bis 
+            else if (number == 11 && wire == 36) {
+                number = 21;
+                wire = 42;
+            }
+            else if (number == 21 && wire == 42) {
+                number = 11;
+                wire = 36;
+            }
+            
 
             // gr3
-            else if (number == 21 && wire == 1) {
-                number = 31;
-                wire = 7;
-            }
-            else if (number == 31 && wire == 7) {
-                number = 21;
-                wire = 1;
-            } // tested
+            // else if (number == 21 && wire == 1) {
+            //     number = 31;
+            //     wire = 7;
+            // }
+            // else if (number == 31 && wire == 7) {
+            //     number = 21;
+            //     wire = 1;
+            // } // tested
 
             
 
