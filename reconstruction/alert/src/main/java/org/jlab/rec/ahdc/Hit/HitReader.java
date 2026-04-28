@@ -42,55 +42,75 @@ public class HitReader {
 
             int id         = bankDGTZ.trueIndex(i) + 1;
             int number     = bankDGTZ.getByte("layer", i);      // e.g. 11,12,21,... (this matches CCDB "layer")
-            int layer      = number % 10;
-            int superlayer = (number % 100) / 10;
             int sector     = bankDGTZ.getInt("sector", i);
             int wire       = bankDGTZ.getShort("component", i);
 
             if (number == 21 && wire == 18) {
                 wire = 19;
-            }
+            } // OK
             else if (number == 21 && wire == 19) {
                 wire = 18;
-            }
+            } // OK
             else if (number == 22 && wire == 20) {
                 wire = 22;
-            }
+            } // OK
             else if (number == 22 && wire == 22) {
                 wire = 20;
+            } // OK
+
+            else if (number == 21 && wire == 31) {
+                number = 22;
+                wire = 29;
             }
-            // else if (number == 21 && wire == 29) {
-            //     wire = 31;
-            // }
-            // else if (number == 21 && wire == 31) {
-            //     wire = 29;
-            // }
-            // else if (number == 21 && wire == 42) {
-            //     wire = 44;
-            // }
-            // else if (number == 21 && wire == 44) {
-            //     wire = 42;
-            // }
-            // else if (number == 22 && wire == 29) {
-            //     wire = 31;
-            // }
-            // else if (number == 22 && wire == 31) {
-            //     wire = 29;
-            // }
-            // else if (number == 22 && wire == 42) {
-            //     wire = 43;
-            // }
-            // else if (number == 22 && wire == 43) {
-            //     wire = 42;
-            // }
-            // else if (number == 31 && wire == 38) {
-            //     wire = 40;
-            // }
-            // else if (number == 31 && wire == 40) {
-            //     wire = 38;
-            // }
+            else if (number == 22 && wire == 29) {
+                number = 21;
+                wire = 31;
+            } // tested
+
+            else if (number == 22 && wire == 30) {
+                number = 21;
+                wire = 29;
+            }
+            else if (number == 21 && wire == 29) {
+                number = 22;
+                wire = 30;
+            } // tested
+
+            else if (number == 11 && wire == 35) {
+                number = 21;
+                wire = 44;
+            }
+            else if (number == 21 && wire == 44) {
+                number = 11;
+                wire = 35;
+            } // tested
+
+            else if (number == 22 && wire == 43) {
+                number = 22;
+                wire = 42;
+            }
+            else if (number == 22 && wire == 42) {
+                number = 31;
+                wire = 56;
+            }
+            else if (number == 31 && wire == 56) {
+                number = 22;
+                wire = 43;
+            } // tested
+
+            else if (number == 31 && wire == 68) {
+                number = 32;
+                wire = 68;
+            }
+            else if (number == 32 && wire == 68) {
+                number = 31;
+                wire = 68;
+            } // tested
 
 
+            // -----
+            int layer      = number % 10;
+            int superlayer = (number % 100) / 10;
 
             // RAW quantities from bank
             double adcRaw            = bankDGTZ.getInt("ADC", i);
