@@ -77,6 +77,16 @@ public class HitReader {
             } // OK ?
 
             // gr1 bis
+            else if (number == 22 && wire == 31) {
+                number = 21;
+                wire = 30;
+            } // OK ?
+            else if (number == 21 && wire == 30) {
+                number = 22;
+                wire = 31;
+            }
+
+            // gr1 tris
             else if (number == 22 && wire == 30) {
                 number = 21;
                 wire = 31;
