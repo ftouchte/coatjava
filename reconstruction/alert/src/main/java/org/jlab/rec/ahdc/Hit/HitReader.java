@@ -81,13 +81,9 @@ public class HitReader {
                 number = 21;
                 wire = 31;
             } // OK ?
-            else if (number == 22 && wire == 31) {
-                number = 22;
-                wire = 30;
-            }
             else if (number == 21 && wire == 31) {
                 number = 22;
-                wire = 31;
+                wire = 30;
             }
 
             // gr2
@@ -96,43 +92,32 @@ public class HitReader {
                 wire = 42;
             } // OK ?
             else if (number == 22 && wire == 42) {
-                number = 21;
-                wire = 42;
-            } 
-            else if (number == 21 && wire == 42) {
                 number = 22;
                 wire = 43;
             } 
 
-            // gr2 bis 
-            // else if (number == 11 && wire == 35) {
-            //     number = 21;
-            //     wire = 44;
-            // }
-            // else if (number == 21 && wire == 44) {
-            //     number = 11;
-            //     wire = 35;
-            // }
-            
+            // gr2 bis
+            else if (number == 11 && wire == 36) {
+                number = 21;
+                wire = 44;
+            } 
+            else if (number == 21 && wire == 44) {
+                number = 11;
+                wire = 36;
+            } 
 
             // gr3
             else if (number == 21 && wire == 56) {
+                number = 22;
+                wire = 55;
+            }
+            else if (number == 22 && wire == 55) {
                 number = 22;
                 wire = 56;
             }
             else if (number == 22 && wire == 56) {
                 number = 21;
                 wire = 56;
-            }
-
-            // gr3 bis
-            else if (number == 11 && wire == 46) {
-                number = 11;
-                wire = 47;
-            }
-            else if (number == 11 && wire == 47) {
-                number = 11;
-                wire = 46;
             }
 
             
