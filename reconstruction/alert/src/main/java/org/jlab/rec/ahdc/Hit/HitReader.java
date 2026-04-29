@@ -66,69 +66,69 @@ public class HitReader {
                 wire = 68;
             } // OK
 
-            // gr1
-            else if (number == 21 && wire == 29) {
-                number = 22;
-                wire = 29;
-            } // OK ?
-            else if (number == 22 && wire == 29) {
-                number = 21;
-                wire = 29;
-            } // OK ?
+            // // gr1
+            // else if (number == 21 && wire == 29) {
+            //     number = 22;
+            //     wire = 29;
+            // } // OK ?
+            // else if (number == 22 && wire == 29) {
+            //     number = 21;
+            //     wire = 29;
+            // } // OK ?
 
-            // gr1 bis
-            else if (number == 22 && wire == 31) {
-                number = 21;
-                wire = 30;
-            } // OK ?
-            else if (number == 21 && wire == 30) {
-                number = 22;
-                wire = 31;
-            }
+            // // gr1 bis
+            // else if (number == 22 && wire == 31) {
+            //     number = 21;
+            //     wire = 30;
+            // } // OK ?
+            // else if (number == 21 && wire == 30) {
+            //     number = 22;
+            //     wire = 31;
+            // }
 
-            // gr1 tris
-            else if (number == 22 && wire == 30) {
-                number = 21;
-                wire = 31;
-            } // OK ?
-            else if (number == 21 && wire == 31) {
-                number = 22;
-                wire = 30;
-            }
+            // // gr1 tris
+            // else if (number == 22 && wire == 30) {
+            //     number = 21;
+            //     wire = 31;
+            // } // OK ?
+            // else if (number == 21 && wire == 31) {
+            //     number = 22;
+            //     wire = 30;
+            // }
 
-            // gr2
-            else if (number == 22 && wire == 43) {
-                number = 22;
-                wire = 42;
-            } // OK ?
-            else if (number == 22 && wire == 42) {
-                number = 22;
-                wire = 43;
-            } 
+            // // gr2
+            // else if (number == 22 && wire == 43) {
+            //     number = 22;
+            //     wire = 42;
+            // } // OK ?
+            // else if (number == 22 && wire == 42) {
+            //     number = 22;
+            //     wire = 43;
+            // } 
 
-            // gr2 bis
-            else if (number == 11 && wire == 36) {
-                number = 21;
-                wire = 44;
-            } 
-            else if (number == 21 && wire == 44) {
-                number = 11;
-                wire = 36;
-            } 
+            // // gr2 bis
+            // else if (number == 11 && wire == 36) {
+            //     number = 21;
+            //     wire = 44;
+            // } 
+            // else if (number == 21 && wire == 44) {
+            //     number = 11;
+            //     wire = 36;
+            // } 
 
-            // gr3
-            else if (number == 21 && wire == 56) {
-                number = 22;
-                wire = 55;
-            }
-            else if (number == 22 && wire == 55) {
-                number = 22;
-                wire = 56;
-            }
-            else if (number == 22 && wire == 56) {
-                number = 21;
-                wire = 56;
-            }
+            // // gr3
+            // else if (number == 21 && wire == 56) {
+            //     number = 22;
+            //     wire = 55;
+            // }
+            // else if (number == 22 && wire == 55) {
+            //     number = 22;
+            //     wire = 56;
+            // }
+            // else if (number == 22 && wire == 56) {
+            //     number = 21;
+            //     wire = 56;
+            // }
 
             
 
