@@ -66,43 +66,42 @@ public class HitReader {
                 wire = 68;
             } // OK
 
-            // v14
-            else if (number == 21 && wire == 42) {
-                number = 21;
-                wire = 44;
-            } // tested
-            else if (number == 21 && wire == 44) {
-                number = 21;
-                wire = 42;
-            } // tested
+        //    else if (number == 21 && wire == 42) {
+        //        number = 21;
+        //        wire = 44;
+        //    } // tested
+        //    else if (number == 21 && wire == 44) {
+        //        number = 21;
+        //        wire = 42;
+        //    } // tested
 
-            else if (number == 22 && wire == 42) {
-                number = 22;
-                wire = 43;
-            } // tested
-            else if (number == 22 && wire == 43) {
-                number = 22;
-                wire = 42;
-            } // tested
+           else if (number == 22 && wire == 42) {
+               number = 22;
+               wire = 43;
+           } // tested
+           else if (number == 22 && wire == 43) {
+               number = 22;
+               wire = 42;
+           } // tested
 
-            // v15
-            // else if (number == 21 && wire == 42) {
-            //     number = 22;
-            //     wire = 43;
-            // } // tested
-            // else if (number == 22 && wire == 43) {
-            //     number = 21;
-            //     wire = 42;
-            // } // tested
+            // // v15
+            //  else if (number == 21 && wire == 42) {
+            //      number = 22;
+            //      wire = 43;
+            //  } // tested
+            //  else if (number == 22 && wire == 43) {
+            //      number = 21;
+            //      wire = 42;
+            //  } // tested
 
-            // else if (number == 22 && wire == 42) {
-            //     number = 21;
-            //     wire = 44;
-            // } // tested
-            // else if (number == 21 && wire == 44) {
-            //     number = 22;
-            //     wire = 42;
-            // } // tested
+            //  else if (number == 22 && wire == 42) {
+            //      number = 21;
+            //      wire = 44;
+            //  } // tested
+            //  else if (number == 21 && wire == 44) {
+            //      number = 22;
+            //      wire = 42;
+            //  } // tested
             
 
             
