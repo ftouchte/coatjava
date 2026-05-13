@@ -302,22 +302,22 @@ public class ALERTEngine extends ReconstructionEngine {
         /// Do a first propagation
         KF.propagation(AHDC_tracks, magfield, IsMC);
 
-        /// Clean AHDC bad hits
-        double sigma = 0.5; // mm
-        for (Track track : AHDC_tracks) {
-            ArrayList<Hit> AHDC_hits = track.getHits();
-            Iterator<Hit> it = AHDC_hits.iterator();
-            while (it.hasNext()) {
-                Hit hit = it.next();
-                if (Math.abs(hit.getResidual()) > 3*sigma) {
-                    it.remove();
-                }
-            }
-        }
+        // /// Clean AHDC bad hits
+        // double sigma = 0.5; // mm
+        // for (Track track : AHDC_tracks) {
+        //     ArrayList<Hit> AHDC_hits = track.getHits();
+        //     Iterator<Hit> it = AHDC_hits.iterator();
+        //     while (it.hasNext()) {
+        //         Hit hit = it.next();
+        //         if (Math.abs(hit.getResidual()) > 3*sigma) {
+        //             it.remove();
+        //         }
+        //     }
+        // }
 
-        // /// Second propagation : each AHDC_tracks will be fitted
-        KF.set_Niter(10);
-        KF.propagation(AHDC_tracks, magfield, IsMC);
+        // // /// Second propagation : each AHDC_tracks will be fitted
+        // KF.set_Niter(10);
+        // KF.propagation(AHDC_tracks, magfield, IsMC);
 
         /// write the AHDC::kftrack bank in the event
         event.removeBank("AHDC::kftrack");
