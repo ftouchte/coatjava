@@ -158,7 +158,7 @@ public class ALERTEngine extends ReconstructionEngine {
     long computing_time = 0;
 
     /** Retrun computing time in nanoseconds */
-    long getComputingTime() { return computing_time;}
+    public long getComputingTime() { return computing_time;}
 
     public boolean processDataEvent(DataEvent event, AlertDCDetector AHDCdet) {
 
