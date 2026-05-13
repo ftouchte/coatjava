@@ -22,6 +22,11 @@ public class Propagator {
 	public Propagator(RungeKutta4 rungeKutta4) {
 		this.RK4 = rungeKutta4;
 	}
+
+	private double stepper_size = 0.5;
+
+	public void setStepSize(double _size) { stepper_size = _size;}
+	public double getStepSize() { return stepper_size;}
     
     // Propagate the stepper toward the next hit
 	void propagate(Stepper stepper, KFHit hit, HashMap<String, Material> materialHashMap) {
@@ -44,7 +49,7 @@ public class Propagator {
 		double prev_R = R;
 
 		// Initialize the stepper size
-		stepper.h = 0.5;
+		stepper.h = stepper_size;
 
 		// Initialize material
 		// R = 3 mm is the location of the target
@@ -80,7 +85,7 @@ public class Propagator {
 				dMin = d;
 			}
 			else {
-				// check the distance between the steps, they should be very big
+				// check the distance between the steps, they should not be very big
 				if (stepper.distance(prev_stepper) > 0.05) {
 					// we didn't reach the precision
 					// so, go back two steps before, reduce the step size
@@ -140,7 +145,7 @@ public class Propagator {
 						target_crossed = true;
 						// reset stepper size
 						// we go back to a normal propagation
-						stepper.h = 0.5;
+						stepper.h = stepper_size;
 						// update stepper material
 						if (stepper.direction) { // forward propagation
 							stepper.material = materialHashMap.get("BONuS12Gas");

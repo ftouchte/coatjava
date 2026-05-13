@@ -45,6 +45,11 @@ public class KalmanFilter {
 	// mm,  they are the misalignement with respect to the AHDC: the are defined in ALERTEngine
 	private double atof_alignement = 0;
 	double clas_alignement = +75; // tmp
+
+	private double stepper_size = 0.5;
+
+	public void setStepSize(double _size) { stepper_size = _size;}
+	public double getStepSize() { return stepper_size;}
 	
 
 	private int counter = 0; // number of utilisation of the Kalman Filter
@@ -110,6 +115,7 @@ public class KalmanFilter {
 			    /// Initialize propagator
 			    RungeKutta4 RK4        = new RungeKutta4(particle, numberOfVariables, B);
 			    Propagator  propagator = new Propagator(RK4);
+				propagator.setStepSize(stepper_size);
 
 			    /// Initialization of the Kalman Fitter
 			    RealVector initialStateEstimate   = (IsVtxDefined) ? new ArrayRealVector(yy) : new ArrayRealVector(y);
@@ -179,6 +185,7 @@ public class KalmanFilter {
 			    /// Initialize propagator
 			    RungeKutta4 RK4        = new RungeKutta4(particle, numberOfVariables, B);
 			    Propagator  propagator = new Propagator(RK4);
+				propagator.setStepSize(stepper_size);
 
 			    /// Initialization of the Kalman Fitter
 			    RealVector initialStateEstimate   = new ArrayRealVector(y);

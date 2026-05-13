@@ -288,7 +288,6 @@ public class ALERTEngine extends ReconstructionEngine {
         double magfieldfactor = runBank.getFloat("solenoid", 0);
         double magfield = 50*magfieldfactor;
         PDGParticle proton = PDGDatabase.getParticleById(2212);
-        int Niter = 35;
         KalmanFilter KF = new KalmanFilter(proton, Niter);
         
         // ------tmp propagation without a fit
@@ -343,6 +342,14 @@ public class ALERTEngine extends ReconstructionEngine {
 
     public void set_atof_alignement(double _shift) {this.atof_alignement = _shift;}
 	public void set_clas_alignement(double _shift) {this.clas_alignement = _shift;}
+
+    private double stepper_size = 0.5;
+	public void setStepSize(double _size) { stepper_size = _size;}
+	public double getStepSize() { return stepper_size;}
+
+    int Niter = 40;
+    public void set_KF_Niter(int Niter) {this.Niter = Niter;}
+	public int  get_KF_Niter() {return this.Niter;}
 
     public boolean processDataEventProjOnly(DataEvent event, AlertDCDetector AHDCdet) {
 
@@ -445,13 +452,14 @@ public class ALERTEngine extends ReconstructionEngine {
         double magfieldfactor = runBank.getFloat("solenoid", 0);
         double magfield = 50*magfieldfactor;
         PDGParticle proton = PDGDatabase.getParticleById(2212);
-        int Niter = 40;
+        
         KalmanFilter KF = new KalmanFilter(proton, Niter);
         
         // ------tmp propagation without a fit
         KF.set_clas_alignement(this.clas_alignement); //mm
         KF.set_atof_alignement(this.atof_alignement); // mm
         KF.propagationWithoutCorrection(AHDC_tracks, magfield, IsMC, event);
+        KF.setStepSize(stepper_size);
         // ----------
         
 
