@@ -155,7 +155,14 @@ public class ALERTEngine extends ReconstructionEngine {
         return processDataEvent(event, AHDC);
     }
 
+    long computing_time = 0;
+
+    /** Retrun computing time in nanoseconds */
+    long getComputingTime() { return computing_time;}
+
     public boolean processDataEvent(DataEvent event, AlertDCDetector AHDCdet) {
+
+        long start_time = System.nanoTime();
 
         if (!event.hasBank("AHDC::adc")) 
             return false;
@@ -332,6 +339,9 @@ public class ALERTEngine extends ReconstructionEngine {
         }     
         DataBank recoKFHitsBank = ahdc_writer.fillAHDCHitsBank(event, AHDC_hits);
         event.appendBank(recoKFHitsBank); // remark: only  hits associated to a track are saved
+
+        long end_time = System.nanoTime();
+        computing_time = end_time - start_time;
  
 
         return true;
