@@ -305,6 +305,7 @@ public class ALERTEngine extends ReconstructionEngine {
         KF.set_atof_alignement(atof_alignement);
         KF.set_vz_constraint(vz_constraint);
         KF.set_vertex_flag(IsVertexDefined);
+        KF.setStepSize(stepper_size);
 
         /// Do a first propagation
         KF.propagation(AHDC_tracks, magfield, IsMC);
