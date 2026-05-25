@@ -67,6 +67,8 @@ public class Propagator {
 		// Do the propagation
 		int nbStep = 0;
 		while (nbStep < maxNbOfStep) {
+			// System.out.print("stepSize " + stepper.h + " , ");
+			// stepper.print();
 			nbStep++;
 			// Save previous states
 			prev_prev_stepper.copyContent(prev_stepper);
