@@ -42,6 +42,8 @@ public class KalmanFilter {
 	// mm,  they are the misalignement with respect to the AHDC: the are defined in ALERTEngine
 	private double atof_alignement = 0;
 
+	private double step_size = 0.5; // mm, step size used by the propagator 
+
 	private int counter = 0; // number of utilisation of the Kalman Filter
 	
 	AlertTOFDetector ATOFdet = null; // reference to the ATOF geometry
@@ -78,6 +80,7 @@ public class KalmanFilter {
 			    /// Initialize propagator
 			    RungeKutta4 RK4        = new RungeKutta4(particle, numberOfVariables, B);
 			    Propagator  propagator = new Propagator(RK4);
+				propagator.setStepSize(step_size);
 
 			    /// Initialization of the Kalman Fitter
 			    RealVector initialStateEstimate   = new ArrayRealVector(y);
@@ -136,7 +139,7 @@ public class KalmanFilter {
 				track.setErrorCovarianceMatrix(TrackFitter.getErrorCovarianceMatrix());
 
 			    /// Post fit propagation (no correction)
-			    KFitter PostFitPropagator = new KFitter(TrackFitter.getStateEstimationVector(), initialErrorCovariance, new Propagator(RK4), materialHashMap);
+			    KFitter PostFitPropagator = new KFitter(TrackFitter.getStateEstimationVector(), initialErrorCovariance, propagator, materialHashMap);
 
 				// Forward propagation in AHDC
 			    for (Hit hit : AHDC_hits) {
@@ -408,4 +411,7 @@ public class KalmanFilter {
 	public void set_atof_alignement(double _shift) {this.atof_alignement = _shift;}
 	public void set_vz_constraint(double _vz) {this.vz_constraint = _vz;}
 	public void set_vertex_flag(boolean _flag) {this.IsVtxDefined = _flag;}
+
+	public void setStepSize(double _size) { this.step_size = _size; }
+	public double getStepSize() { return this.step_size;}
 }

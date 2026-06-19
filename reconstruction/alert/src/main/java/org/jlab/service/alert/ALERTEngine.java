@@ -124,6 +124,22 @@ public class ALERTEngine extends ReconstructionEngine {
     // AHDC calibration table (refreshed on run change)
     private IndexedTable ahdcAdcGainsTable;
 
+    private double clas_alignment = +75; //mm
+    private double step_size = 0.5; // mm, step size used by the propagator
+    long computing_time = 0;
+
+    /** Retrun computing time in nanoseconds */
+    public long getComputingTime() { return computing_time;}
+
+    public void set_clas_alignment(double _pos) { this.clas_alignment = _pos;}
+    public void setStepSize(double _size) { this.step_size = _size;}
+    public double get_clas_alignment() { return this.clas_alignment;}
+    public double getStepSize() { return this.step_size;}
+
+    private int Niter = 25;
+    public void set_KF_Niter(int Niter) {this.Niter = Niter;}
+	public int  get_KF_Niter() {return this.Niter;}
+
     public void setB(double B) {
         this.b = B;
     }
@@ -195,6 +211,8 @@ public class ALERTEngine extends ReconstructionEngine {
      */
     @Override
     public boolean processDataEventUser(DataEvent event) {
+
+        long start_time = System.nanoTime();
 
         if (!event.hasBank("AHDC::adc"))
             return false;
@@ -334,22 +352,22 @@ public class ALERTEngine extends ReconstructionEngine {
         // ATOF-dependent processing follows. Bail out for events without ATOF::tdc
         // so the AHDC track-finding output above stands on its own (matches the
         // pre-refactor flow where AHDCEngine ran independently of ATOF presence).
-        if (!event.hasBank("ATOF::tdc"))
-            return false;
+        // if (!event.hasBank("ATOF::tdc"))
+        //     return false;
 
-        //Do we need to read the event vx,vy,vz?
-        //If not, this part can be moved in the initialization of the engine.
-        double eventVx=0,eventVy=0,eventVz=0; //They should be in CM
-        //Track Projector Initialisation with b field
-        Swim swim = new Swim();
-        float magField[] = new float[3];
-        swim.BfieldLab(eventVx, eventVy, eventVz, magField); 
-        this.b = Math.sqrt(Math.pow(magField[0],2) + Math.pow(magField[1],2) + Math.pow(magField[2],2));
+        // //Do we need to read the event vx,vy,vz?
+        // //If not, this part can be moved in the initialization of the engine.
+        // double eventVx=0,eventVy=0,eventVz=0; //They should be in CM
+        // //Track Projector Initialisation with b field
+        // Swim swim = new Swim();
+        // float magField[] = new float[3];
+        // swim.BfieldLab(eventVx, eventVy, eventVz, magField); 
+        // this.b = Math.sqrt(Math.pow(magField[0],2) + Math.pow(magField[1],2) + Math.pow(magField[2],2));
 
-        TrackProjector projector = new TrackProjector();
-        projector.setB(this.b);
-        projector.projectTracks(event);
-        rbc.appendMatchBanks(event, projector.getProjections());
+        // TrackProjector projector = new TrackProjector();
+        // projector.setB(this.b);
+        // projector.projectTracks(event);
+        // rbc.appendMatchBanks(event, projector.getProjections());
 
         /// ---------------------------------------------------------------------------------------
         /// Track matching using AI ---------------------------------------------------------------
@@ -527,7 +545,7 @@ public class ALERTEngine extends ReconstructionEngine {
         if (!event.hasBank("AHDC::hits")) {return false;}
 
         /// tmp: misalignement with respect to the center of the AHDC (mm)
-        double clas_alignement = +75;
+        //double clas_alignment = +75;
         double atof_alignement = 0;
 
         /// Read the electron vertex
@@ -607,7 +625,7 @@ public class ALERTEngine extends ReconstructionEngine {
 
         /// Associate the electron vertex (the beamline hit) to each track
         boolean IsMC = event.hasBank("MC::Particle");
-        double vz_constraint = vz_electron + (IsMC ? 0 : clas_alignement); // we don't have the misalignment in simulation
+        double vz_constraint = vz_electron + (IsMC ? 0 : clas_alignment); // we don't have the misalignment in simulation
         for (Track track : AHDC_tracks) {
             RadialKFHit hit_beam = new RadialKFHit(0, 0, vz_constraint);
             RealMatrix measurementNoise = new Array2DRowRealMatrix(
@@ -669,13 +687,14 @@ public class ALERTEngine extends ReconstructionEngine {
         double magfieldfactor = runBank.getFloat("solenoid", 0);
         double magfield = 50*magfieldfactor;
         PDGParticle proton = PDGDatabase.getParticleById(2212);
-        int Niter = 25;
+        //int Niter = 25;
         KalmanFilter KF = new KalmanFilter(proton, Niter);
         //KF.set_ATOF_detector(null);
-        KF.set_ATOF_detector(ATOF); // Reference the ATOF geometry in the Kalman Filter
+        //KF.set_ATOF_detector(ATOF); // Reference the ATOF geometry in the Kalman Filter
         KF.set_atof_alignement(atof_alignement);
         KF.set_vz_constraint(vz_constraint);
         KF.set_vertex_flag(IsVertexDefined);
+        KF.setStepSize(step_size);
 
         /// Do a first propagation
         KF.propagation(AHDC_tracks, magfield, IsMC);
@@ -762,6 +781,8 @@ public class ALERTEngine extends ReconstructionEngine {
         DataBank recoKFHitsBank = ahdc_writer.fillAHDCHitsBank(event, AHDC_hits);
         event.appendBank(recoKFHitsBank); // remark: only  hits assocuated to a track are saved
  
+        long end_time = System.nanoTime();
+        computing_time = end_time - start_time;
 
         return true;
     }
@@ -834,5 +855,11 @@ public class ALERTEngine extends ReconstructionEngine {
         writer.close();
 
         System.out.println("finished " + (System.nanoTime() - starttime) * Math.pow(10, -9));
+    }
+
+    void fix_swim_issue() {
+        Swim swim = new Swim();
+        // ce code ne fait rien du tout, problème dépendance mais je n'ai pas le temps pour le résoudre, je masque donc ATOF et créée ce code
+        // on dirait que je dois prouve que je l'utilise
     }
 }
