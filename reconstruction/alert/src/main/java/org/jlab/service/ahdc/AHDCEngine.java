@@ -50,6 +50,7 @@ public class AHDCEngine extends ReconstructionEngine {
         cp.loadTable("/geometry/alert/ahdc/layer_alignment");
         cp.loadTable("/geometry/alert/ahdc/wire_alignment");
         AHDCdet = (new AlertDCFactory()).createDetectorCLAS(cp);
+        cp.disconnect();
     }
 
     @Override

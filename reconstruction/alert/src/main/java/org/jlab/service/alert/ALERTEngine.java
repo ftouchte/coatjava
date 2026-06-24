@@ -161,6 +161,7 @@ public class ALERTEngine extends ReconstructionEngine {
         cp.loadTable("/geometry/alert/ahdc/wire_alignment");
         ATOF = (new AlertTOFFactory()).createDetectorCLAS(cp);
         AHDC = (new AlertDCFactory()).createDetectorCLAS(cp);
+        cp.disconnect();
     }
 
     /** 
